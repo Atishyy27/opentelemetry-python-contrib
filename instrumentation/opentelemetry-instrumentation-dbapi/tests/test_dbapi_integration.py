@@ -135,9 +135,7 @@ class TestDBApiIntegration(TestBase):
                     "testcomponent",
                     connection_attributes,
                 )
-                mock_connection = db_integration.wrapped_connection(
-                    mock_connect, {}, connection_props
-                )
+                mock_connection = db_integration.wrapped_connection(mock_connect, {}, connection_props)
                 cursor = mock_connection.cursor()
                 # Must not raise IndexError.
                 cursor.execute(query)
