@@ -69,9 +69,11 @@ class TestSqlalchemyInstrumentation(TestBase):
             tracer_provider=self.tracer_provider,
         )
         cnx = engine.connect()
-        # Must not raise IndexError.
-        cnx.execute(text("/* comment only */"))
-        cnx.execute(text("   "))
+        try:
+            cnx.execute(text("/* comment only */"))
+            cnx.execute(text("   "))
+        except Exception as exception:  # pylint: disable=broad-exception-caught
+            self.fail(f"An unexpected exception was raised {exception}")
         spans = self.memory_exporter.get_finished_spans()
         # connect + 2 executes
         self.assertEqual(len(spans), 3)
